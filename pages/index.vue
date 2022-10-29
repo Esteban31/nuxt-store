@@ -21,10 +21,10 @@
         </v-row>
       </v-col>
       <v-col cols="12" sm="6" md="4">
-        <h2>Shopping Cart {{message}}</h2>
+        <h2>Shopping Cart</h2>
         <v-card class="pa-2" outlined tile>
 
-          <v-list rounded>
+          <v-list rounded v-if="$store.getters['getCart'].length>0">
             <v-list-item-group color="primary">
               <v-list-item two-line v-for="(product, index) in $store.getters['getCart']" :key="index">
                 <v-list-item-avatar>
@@ -39,12 +39,17 @@
                   <v-list-item-subtitle>{{product.description}}</v-list-item-subtitle>
                 </v-list-item-content>
                 {{product.quantity}}
+                <v-btn class="mx-2" fab dark small color="gray">
+                  <v-icon dark v-on:click="increment(index)">
+                    mdi-plus
+                  </v-icon>
+                </v-btn>
                 <v-btn class="mx-2" fab dark small color="secondary">
                   <v-icon dark v-on:click="decrement(index)">
                     mdi-minus
                   </v-icon>
                 </v-btn>
-                <v-btn class="mx-2" fab dark small color="primary">
+                <v-btn class="mx-2" fab dark small color="pink">
                   <v-icon dark v-on:click="deleteItem(index)">
                     mdi-close
                   </v-icon>
@@ -53,8 +58,22 @@
             </v-list-item-group>
           </v-list>
 
+          <Center v-else><p>Por favor elige un producto a la derecha</p></Center>
+
           <br>
           <h3>TOTAL $ {{$store.getters['getTotal']}}</h3>
+          <Center>
+              <script
+                src="https://checkout.wompi.co/widget.js"
+                data-render="button"
+                data-public-key="pub_test_Kw4aC0rZVgLZQn209NbEKPuXLzBD28Zx"
+                data-currency="COP"
+                :data-amount-in-cents="(($store.getters['getTotal']===0)?1:$store.getters['getTotal'])"
+                data-reference="4XMPGKWWPKWQ"
+                data-signature:integrity="37c8407747e595535433ef8f6a811d853cd943046624a0ec04662b17bbf33bf5"
+                >
+              </script>
+          </Center>
         </v-card>
       </v-col>
     </v-row>
@@ -85,9 +104,12 @@ export default {
         this.$store.state.element = element;
         this.$store.dispatch('addProductAction');
       }else{//Si existe
-        this.$store.dispatch('incrementQuantityAction',indice);
+        // this.$store.dispatch('incrementQuantityAction',indice);
       }
 
+    },
+    increment(index){
+      this.$store.dispatch('incrementQuantityAction',index);
     },
     deleteItem(index){
       this.$store.dispatch('deleteProductOnCartAction',index);

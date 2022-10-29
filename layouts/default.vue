@@ -21,6 +21,11 @@
         <v-icon right>
           mdi-cart
         </v-icon>
+         <v-btn class="mx-2" fab dark small color="pink" v-if="$store.getters['getTotal']>0" v-on:click="emptyCart()">
+            <v-icon dark>
+              mdi-close
+            </v-icon>
+          </v-btn>
       </v-chip>
     </v-app-bar>
     <v-main>
@@ -58,5 +63,10 @@ export default {
       totalProducts:0
     }
   },
+  methods:{
+    emptyCart(){
+      this.$store.dispatch('emptyCartAction');
+    }
+  }
 }
 </script>
