@@ -58,7 +58,7 @@
             </v-list-item-group>
           </v-list>
 
-          <Center v-else><p>Por favor elige un producto a la derecha</p></Center>
+          <Center v-else><p>Por favor elige un producto de la izquierda</p></Center>
 
           <br>
           <h3>TOTAL $ {{$store.getters['getTotal']}}</h3>
